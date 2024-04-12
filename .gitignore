@@ -1,0 +1,15 @@
+.deps/
+autom4te.cache/
+Makefile.in
+compile
+config.guess
+config.sub
+install-sh
+missing
+depcomp
+config.h.in
+configure
+aclocal.m4
+libax25/m4/*.m4
+ar-lib
+ltmain.sh
