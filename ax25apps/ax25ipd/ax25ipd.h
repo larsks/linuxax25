@@ -43,6 +43,7 @@ extern int udp_mode;                   /* true if we need a UDP socket */
 extern int ip_mode;                    /* true if we need the raw IP socket */
 extern unsigned short my_udp;          /* the UDP port to use (network byte order) */
 extern char ttydevice[PATH_MAX];       /* the tty device for serial comms */
+extern char ptysymlink[PATH_MAX];      /* path to symlink to allocated pty device */
 extern int ttyspeed;                   /* The baud rate on the tty device */
 extern unsigned char mycallsign[7];    /* My callsign, shifted ASCII with SSID */
 extern unsigned char mycallsign2[7];   /* My seconds port callsign, shifted ASCII with SSID */

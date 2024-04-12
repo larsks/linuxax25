@@ -26,6 +26,7 @@
 #include <netinet/in.h>
 #include <netinet/in_systm.h>
 #include <netinet/ip.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <sys/socket.h>
@@ -264,6 +265,32 @@ void io_init(void)
 }
 
 /*
+ * Create a symbolic link at link_path pointing to target_path. If link_path exists,
+ * remove it if it is a symbolic link before re-creating it.
+ */
+
+int create_safe_symlink(char *target_path, char *link_path) {
+  struct stat statbuf_link;
+
+  if (lstat(link_path, &statbuf_link) == 0) {
+    if (S_ISLNK(statbuf_link.st_mode)) {
+      if (unlink(link_path) != 0) {
+        return -1;
+      }
+    } else {
+      errno = EEXIST;
+      return -1;
+    }
+  }
+
+  if (symlink(target_path, link_path) != 0) {
+    return -1;
+  }
+
+  return 0;
+}
+
+/*
  * open and initialize the IO interfaces
  */
 
@@ -333,6 +360,12 @@ void io_open(void)
 			perror("Cannot unlock pts-device.");
 			exit(1);
 		}
+    if (ptysymlink[0] != '\0') {
+      if (create_safe_symlink(namepts, ptysymlink) != 0) {
+        perror("Cannot create symlink to pts-device");
+        exit(1);
+      }
+    }
 	}
 
 	if (ttyfd_bpq) {
