@@ -228,6 +228,7 @@ int main(int argc, char *argv[])
 {
 	int  fd;
 	int  disc = N_AX25;
+	int  run_in_foreground = FALSE;
 	char dev[64];
 	int  v = 4;
 	char *namepts = NULL;  /* name of the unix98 pts slave, which
@@ -239,8 +240,11 @@ int main(int argc, char *argv[])
 	if (!strcmp(progname, "spattach"))
 		disc = N_6PACK;
 
-	while ((fd = getopt(argc, argv, "b6i:lm:v")) != -1) {
+	while ((fd = getopt(argc, argv, "fb6i:lm:v")) != -1) {
 		switch (fd) {
+    case 'f':
+      run_in_foreground = TRUE;
+      break;
 		case '6':
 			disc = N_6PACK;
 			break;
@@ -378,7 +382,7 @@ int main(int argc, char *argv[])
 	/*
 	 * Become a daemon if we can.
 	 */
-	if (!daemon_start(FALSE)) {
+	if (run_in_foreground && !daemon_start(FALSE)) {
 		fprintf(stderr, "%s: cannot become a daemon\n", progname);
 		return 1;
 	}

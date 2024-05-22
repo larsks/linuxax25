@@ -189,6 +189,7 @@ static char Node[11];				/* Room for 'GB9ZZZ-15\0' (NETROM) and 10 bytes ROSE '6
 static char myAX25Name[10];			/* Room for 'GB9ZZZ-15\0' */
 static char *Port;
 static int Logging		= FALSE;
+static int Daemon     = TRUE;
 
 static int ReadConfig(void);
 
@@ -1043,8 +1044,12 @@ int main(int argc, char *argv[])
 	char *p;
 	char *mesg;
 
-	while ((cnt = getopt(argc, argv, "c:lv")) != EOF) {
+	while ((cnt = getopt(argc, argv, "fc:lv")) != EOF) {
 		switch (cnt) {
+    case 'f':
+      Daemon = FALSE;
+      break;
+
 		case 'c':
 			ConfigFile = optarg;
 			break;
@@ -1058,7 +1063,7 @@ int main(int argc, char *argv[])
 			return 1;
 
 		default:
-			fprintf(stderr, "Usage: ax25d [-v] [-c altfile] [-l]\n");
+			fprintf(stderr, "Usage: ax25d [-fvl] [-c altfile]\n");
 			return 1;
 		}
 	}
@@ -1072,7 +1077,7 @@ int main(int argc, char *argv[])
 
 	rs_config_load_ports();
 
-	if (!daemon_start(TRUE)) {
+	if (Daemon && !daemon_start(TRUE)) {
 		fprintf(stderr, "ax25d: cannot become a daemon\n");
 		return 1;
 	}
