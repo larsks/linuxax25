@@ -289,6 +289,7 @@ int ax25_config_load_ports(void)
 	const char **pp;
 	int callcount = 0;
 	struct ifreq ifr;
+  char *axports_file = NULL;
 
 	/* Reliable listing of all network ports on Linux
 	   is only available via reading  /proc/net/dev ...  */
@@ -359,9 +360,12 @@ int ax25_config_load_ports(void)
 		fp = NULL;
 	}
 
-
-	if ((fp = fopen(CONF_AXPORTS_FILE, "r")) == NULL) {
-		fprintf(stderr, "axconfig: unable to open axports file %s (%s)\n", CONF_AXPORTS_FILE, strerror(errno));
+  axports_file = getenv("AX25_AXPORTS_FILE");
+  if (axports_file == NULL) {
+    axports_file = CONF_AXPORTS_FILE;
+  }
+	if ((fp = fopen(axports_file, "r")) == NULL) {
+		fprintf(stderr, "axconfig: unable to open axports file %s (%s)\n", axports_file, strerror(errno));
 		goto cleanup;
 	}
 
