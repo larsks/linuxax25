@@ -42,7 +42,7 @@
 #include <unistd.h>
 #include <wchar.h>
 #include <wctype.h>
-#include <ncursesw/ncurses.h>
+#include <ncurses.h>
 #include <locale.h>
 #include <iconv.h>
 #include <sys/ioctl.h>
