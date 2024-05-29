@@ -19,7 +19,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <syslog.h>
-#include <termio.h>
+#include <termios.h>
 #include <time.h>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -32,7 +32,7 @@
 
 #include "ax25ipd.h"
 
-static struct termio nterm;
+static struct termios nterm;
 
 int ttyfd = -1;
 static int udpsock = -1;
